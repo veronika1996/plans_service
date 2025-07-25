@@ -1,0 +1,8 @@
+CREATE DATABASE plans;
+CREATE DATABASE plans_test;
+
+CREATE USER postgres WITH PASSWORD 'password';
+
+GRANT ALL PRIVILEGES ON DATABASE plans_test TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;
+

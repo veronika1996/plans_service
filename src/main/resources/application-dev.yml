@@ -1,0 +1,26 @@
+server:
+  servlet:
+      context-path: /meal_plan
+  port: 8085
+spring:
+  application:
+    name: Plans app
+  datasource:
+    url: jdbc:postgresql://localhost:5433/plans
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui/index.html
+  api-docs:
+    enabled: true
+recipes:
+  service:
+    url: http://localhost:8084/meal_plan
