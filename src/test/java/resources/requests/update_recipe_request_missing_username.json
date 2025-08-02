@@ -1,0 +1,15 @@
+{
+  "planRecipes": [
+    {
+      "recipeId": 25,
+      "calories": 500,
+      "recipeCategory": "BREAKFAST"
+    },
+    {
+      "recipeId": 20,
+      "calories": 600,
+      "recipeCategory": "LUNCH"
+    }
+  ],
+  "date": "2025-08-28"
+}

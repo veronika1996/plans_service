@@ -1,0 +1,12 @@
+{
+  "planRecipes": [
+    {
+      "recipeId": 20,
+      "calories": 500,
+      "recipeCategory": "BREAKFAST"
+    }
+  ],
+  "username": "Admin",
+  "date": "2025-08-28",
+  "consumedCalories": 500
+}
