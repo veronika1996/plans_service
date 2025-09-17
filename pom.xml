@@ -137,7 +137,6 @@
         <configuration>
           <excludes>
             <exclude>com/plans_service/PlansServiceApplication*</exclude>
-            <exclude>com/plans_service/entity/RecipeClient*</exclude>
           </excludes>
         </configuration>
         <executions>
