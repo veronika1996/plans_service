@@ -9,6 +9,18 @@ Feature: Get a plan by date and username
     Then I should receive a 200 response
     And the plan response should be like the plan data in JSON file "/responses/get_plan_by_name_and_username.json"
 
+  @getByDateAndUsername
+  Scenario: Successfully retrieve a plan by date and username when recipe is removed
+    When I send a GET request to "/plans?username=Admin&date=2025-08-28" and recipe doesn't exist
+    Then I should receive a 200 response
+    And the plan response should be like the plan data in JSON file "/responses/get_plan_by_name_and_username_no_recipe.json"
+
+  @getByDateAndUsername
+  Scenario: Successfully retrieve a plan by date and username when recipe all recipes are removed
+    When I send a GET request to "/plans?username=Admin&date=2025-08-28" and all recipes don't exist
+    Then I should receive a 200 response
+    And the plan response should be like the plan data in JSON file "/responses/get_plan_by_name_and_username_empty_recipes.json"
+
   @error
   Scenario: Get a non-existing plan for given username
     When I send a GET request to "/plans?username=Admin1&date=2025-08-28"

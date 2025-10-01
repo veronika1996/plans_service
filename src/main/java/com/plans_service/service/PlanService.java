@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -44,25 +45,34 @@ public class PlanService {
     return mapToDto(entity);
   }
 
+  @Transactional
   public PlanDTO mapToDto(PlanEntity entity) {
+    List<PlanRecipeDTO> planRecipes = new ArrayList<>();
+    List<PlanRecipeEntity> filteredRecipes = new ArrayList<>();
 
-    List<PlanRecipeDTO> planRecipes =
-        entity.getPlanRecipes().stream()
-            .map(
-                rd ->
-                    new PlanRecipeDTO(
-                        rd.getRecipeId(),
-                        recipeClient.getRecipesCalories(rd.getRecipeId()),
-                        rd.getRecipeCategory()))
-            .toList();
+    for (PlanRecipeEntity recipe : entity.getPlanRecipes()) {
+      Integer calories = recipeClient.getRecipesCalories(recipe.getRecipeId());
+      if (calories != null) {
+        planRecipes.add(new PlanRecipeDTO(recipe.getRecipeId(), calories, recipe.getRecipeCategory()));
+        filteredRecipes.add(recipe);
+      }
+    }
+
+    if (!filteredRecipes.isEmpty()) {
+      entity.setPlanRecipes(new ArrayList<>(filteredRecipes));
+      planRepository.save(entity);
+    }
 
     return new PlanDTO(
         entity.getId(),
         planRecipes,
         entity.getUsername(),
         entity.getDate(),
-        entity.getConsumedCalories());
+        entity.getConsumedCalories()
+    );
+
   }
+
 
   public PlanEntity mapToEntity(PlanDTO dto) {
     PlanEntity entity = new PlanEntity();

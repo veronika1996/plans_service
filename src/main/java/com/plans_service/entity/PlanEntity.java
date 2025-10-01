@@ -19,7 +19,7 @@ public class PlanEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanRecipeEntity> planRecipes;
 
     private String username;

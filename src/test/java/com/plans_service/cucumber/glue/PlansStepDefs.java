@@ -16,6 +16,7 @@ import com.plans_service.entity.RecipeClient;
 import com.plans_service.enums.RecipeCategory;
 import com.plans_service.repository.PlanRepository;
 import com.plans_service.service.PlanService;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -80,12 +81,16 @@ public class PlansStepDefs {
   @Given("the system is initialized")
   public void theSystemIsInitialized() {
     planRepository.deleteAll();
-    PlanEntity entity = new PlanEntity(null, "Admin", LocalDate.of(2025, 8, 28), 500);
+    PlanEntity entity = new PlanEntity(null, "Admin", LocalDate.of(2025, 8, 28), 1100);
     PlanRecipeEntity rie = new PlanRecipeEntity();
     rie.setRecipeId(20L);
     rie.setPlan(entity);
     rie.setRecipeCategory(RecipeCategory.BREAKFAST);
-    entity.setPlanRecipes(List.of(rie));
+    PlanRecipeEntity rie2 = new PlanRecipeEntity();
+    rie2.setRecipeId(40L);
+    rie2.setPlan(entity);
+    rie2.setRecipeCategory(RecipeCategory.LUNCH);
+    entity.setPlanRecipes(List.of(rie, rie2));
     PlanEntity savedEntity = planRepository.save(entity);
 
     planId = savedEntity.getId();
@@ -162,7 +167,44 @@ public class PlansStepDefs {
         500);
     when(recipeClient.calculateConsumedCalories(List.of(20L))).thenReturn(
         500);
+    when(recipeClient.getRecipesCalories(40L)).thenReturn(600);
+    when(recipeClient.calculateConsumedCalories(List.of(40L))).thenReturn(
+        600);
       try {
+      response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+    } catch (HttpClientErrorException | HttpServerErrorException e) {
+      response = ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+    }
+  }
+
+  @When("I send a GET request to {string} and recipe doesn't exist")
+  public void iSendAGETRequestToAndRecipeDoesnTExist(String path) {
+      String url = BASE_PATH + path;
+      when(recipeClient.getRecipesCalories(20L)).thenReturn(
+          500);
+      when(recipeClient.calculateConsumedCalories(List.of(20L))).thenReturn(
+          500);
+    when(recipeClient.getRecipesCalories(40L)).thenReturn(null);
+    when(recipeClient.calculateConsumedCalories(List.of(40L))).thenReturn(
+        null);
+      try {
+        response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+      } catch (HttpClientErrorException | HttpServerErrorException e) {
+        response = ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+      }
+  }
+
+  @When("I send a GET request to {string} and all recipes don't exist")
+  public void iSendAGETRequestToAndAllRecipesDoesnTExist(String path) {
+    String url = BASE_PATH + path;
+    when(recipeClient.getRecipesCalories(20L)).thenReturn(
+        null);
+    when(recipeClient.calculateConsumedCalories(List.of(20L))).thenReturn(
+        null);
+    when(recipeClient.getRecipesCalories(40L)).thenReturn(null);
+    when(recipeClient.calculateConsumedCalories(List.of(40L))).thenReturn(
+        null);
+    try {
       response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
     } catch (HttpClientErrorException | HttpServerErrorException e) {
       response = ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
@@ -255,5 +297,4 @@ public class PlansStepDefs {
   public void theDatabaseTableIsEmpty() {
     planRepository.deleteAll();
   }
-
 }

@@ -4,11 +4,6 @@
       "recipeId": 20,
       "calories": 500,
       "recipeCategory": "BREAKFAST"
-    },
-    {
-      "recipeId": 40,
-      "calories": 600,
-      "recipeCategory": "LUNCH"
     }
   ],
   "username": "Admin",

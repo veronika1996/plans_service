@@ -12,8 +12,8 @@
   <groupId>com.mealplan</groupId>
   <artifactId>mealplan-app</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Meal plan app</name>
-  <description>A Spring Boot application for planning meals and managing healthy recipes.</description>
+  <name>Plans service</name>
+  <description>Plans service</description>
   <url/>
   <licenses>
     <license/>
@@ -137,7 +137,6 @@
         <configuration>
           <excludes>
             <exclude>com/plans_service/PlansServiceApplication*</exclude>
-            <exclude>com/plans_service/entity/RecipeClient*</exclude>
           </excludes>
         </configuration>
         <executions>
